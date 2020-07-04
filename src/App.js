@@ -7,24 +7,25 @@ import { Route, BrowserRouter } from "react-router-dom";
 
 class BooksApp extends React.Component {
   state = {
-    selectedBooks: [],
+    shownBooks: [],
   };
   componentDidMount() {
-    this.updateAllData();
+    this.updateAllData()
   }
-  updateAllData = () => {
-    BooksAPI.getAll().then((data) => {
-      this.setState({
-        selectedBooks: data,
-      });
-    });
-  };
 
   updateBookState = (book, shelf) => {
-    BooksAPI.update(book, shelf).then((response) => {
-      this.updateAllData();
-    });
-  };
+    BooksAPI.update(book, shelf).then(response => {
+      this.updateAllData()
+    })
+  }
+
+  updateAllData = () => {
+    BooksAPI.getAll().then(data => {
+            this.setState({
+              shownBooks: data
+            })
+    });    
+  }
 
   render() {
     return (
@@ -33,15 +34,15 @@ class BooksApp extends React.Component {
           <Route
             exact
             path="/"
-            render={() => <Books existingBooks={this.state.selectedBooks} />}
+            render={() => <Books presentedBooks={this.state.shownBooks} />}
           />
 
           <Route
             path="/search"
             render={() => (
               <SearchPage
-                updateBookState={this.updateBookState}
-                existingBooks={this.state.selectedBooks}
+              updateBookState={this.updateBookState}
+              presentedBooks={this.state.shownBooks}
               />
             )}
           />
